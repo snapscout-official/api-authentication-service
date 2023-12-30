@@ -10,7 +10,9 @@ trait HasClaims{
     {
         return [
             'name' => $this->name,
-            'email' => $this->email
+            'email' => $this->email,
+            'role_id' => $this->role_id,
+            ''
         ];
     }
 }
