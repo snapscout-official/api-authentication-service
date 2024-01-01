@@ -28,8 +28,6 @@ return new class extends Migration
                 ->cascadeOnDelete()
                 ->cascadeOnUpdate();
             $table->string('position')->nullable(false);
-            
-
         });
     }
 
@@ -38,6 +36,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('agency');
+        Schema::dropIfExists('agencies');
     }
 };
