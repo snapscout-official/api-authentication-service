@@ -4,6 +4,7 @@ namespace Database\Seeders;
 
 // use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
@@ -21,10 +22,16 @@ class DatabaseSeeder extends Seeder
         //     'name' => 'Test User',
         //     'email' => 'test@example.com',
         // ]);
-        User::create([
-            'name' => 'Gio Gonzales',
-            'email' => 'gio.gonzales@carsu.edu.ph',
-            'password' => Hash::make('test')
-        ]);
+        // User::create([
+        //     'name' => 'Gio Gonzales',
+        //     'email' => 'gio.gonzales@carsu.edu.ph',
+        //     'password' => Hash::make('test')
+        // ]);
+        $roles = ['merchant', 'agency', 'admin'];
+        foreach($roles as $role){
+            Role::create([
+                'role_name' => $role
+            ]);
+        }
     }
 }
