@@ -9,6 +9,7 @@ use Laravel\Sanctum\HasApiTokens;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 
 class User extends Authenticatable implements JWTSubject
@@ -21,9 +22,15 @@ class User extends Authenticatable implements JWTSubject
      * @var array<int, string>
      */
     protected $fillable = [
-        'name',
+        'first_name',
+        'last_name',
+        'birth_date',
+        'tin_number',
+        'gender',
+        'phone_number',
         'email',
         'password',
+        'role_id'
     ];
 
     /**
@@ -46,4 +53,11 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
    
+    public function agency():HasOne{
+        return $this->hasOne(Agency::class, 'agency_id', 'id');
+    }
+    public function merchant():HasOne{
+        return $this->hasOne(Merchant::class, 'merchant_id', 'id');
+    }
+
 }

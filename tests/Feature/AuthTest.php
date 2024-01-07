@@ -8,8 +8,6 @@ use Illuminate\Foundation\Testing\WithFaker;
 use Tests\TestCase;
 use Tymon\JWTAuth\Facades\JWTAuth;
 
-use function PHPSTORM_META\map;
-
 class AuthTest extends TestCase
 {
     /**
