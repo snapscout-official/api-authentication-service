@@ -1,9 +1,10 @@
 <?php
 
-use App\Http\Controllers\AuthController;
-use App\Http\Controllers\Merchant\AuthController as MerchantAuthController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\AuthController;
+use Illuminate\Foundation\Auth\EmailVerificationRequest;
+use App\Http\Controllers\Merchant\AuthController as MerchantAuthController;
 
 /*
 |--------------------------------------------------------------------------
@@ -27,3 +28,7 @@ Route::group(['prefix' => 'merchant'], function(){
         Route::post('/login', 'login');
     });
 });
+Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
+    $request->fulfill();
+    return redirect('/home');
+})->middleware(['auth', 'signed'])->name('verification.verify');

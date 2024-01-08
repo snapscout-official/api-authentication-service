@@ -8,13 +8,15 @@ use App\Http\Requests\Merchant\LoginRequest;
 use App\Http\Requests\Merchant\SignupRequest;
 use App\Models\Role;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
     public function signup(SignupRequest $request){
         $user = CreateMerchantCredentials::run($request);
+        event(new Registered($user));
         $token = $user->generateToken();
-        $request->expectsJson() ? 
+        return $request->expectsJson() ? 
                 response()->json([
                     'message' => 'sucessfully created merchant user',
                     'token' => $token,
