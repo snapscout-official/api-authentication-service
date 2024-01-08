@@ -27,12 +27,14 @@ trait HasClaims{
             $agency_data = $this->agency;
             $claims['agency'] = $agency_data;
             $claims['location'] = $agency_data->location;
+            $claims['role_id'] = Role::AGENCY;
             return $claims;
         }
         if ($this->role_id === Role::MERCHANT){
             $merchant_data = $this->merchant;
             $claims['merchant'] = $merchant_data;
             $claims['location'] = $merchant_data->location;
+            $claims['role_id'] = Role::MERCHANT;
             return $claims;
         }
     }

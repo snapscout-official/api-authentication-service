@@ -3,7 +3,10 @@
 namespace App\Providers;
 
 // use Illuminate\Support\Facades\Gate;
+
+use Illuminate\Auth\Notifications\VerifyEmail;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 class AuthServiceProvider extends ServiceProvider
 {
@@ -21,6 +24,9 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
+        // VerifyEmail::createUrlUsing(function($notifiable){
+        //     $frontendUrl = 'www.snap-scout.com';
+        //     return URL::temporarySignedRoute()
+        // });
     }
 }

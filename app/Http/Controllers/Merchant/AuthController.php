@@ -2,57 +2,55 @@
 
 namespace App\Http\Controllers\Merchant;
 
+use App\Actions\Merchant\CreateMerchantCredentials;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Merchant\LoginRequest;
+use App\Http\Requests\Merchant\SignupRequest;
 use App\Models\Role;
 use App\Models\User;
-use App\Models\Location;
-use App\Models\Merchant\Philgep;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
-use Illuminate\Support\Facades\Hash;
-use App\Models\Merchant\MerchantCategory;
-use App\Http\Requests\Merchant\SignupRequest;
-use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Auth\Events\Registered;
 
 class AuthController extends Controller
 {
     public function signup(SignupRequest $request){
-        DB::beginTransaction();
-
-        $user = User::create([
-            'first_name' => $request->firstName,
-            'last_name' => $request->lastName,
-            'birth_date' => $request->dateOfBirth,
-            'tin_number' => $request->tinNumber,
-            'gender' => $request->gender,
-            'phone_number' => $request->phoneNumber,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'role_id' => Role::MERCHANT,
+        $user = CreateMerchantCredentials::run($request);
+        event(new Registered($user));
+        $token = $user->generateToken();
+        return $request->expectsJson() ? 
+                response()->json([
+                    'message' => 'sucessfully created merchant user',
+                    'token' => $token,
+                    'token_type' => 'bearer'
+                ]) :
+                [
+                    'message' => 'sucessfully created merchant user',
+                    'token' => $token,
+                    'token_type' => 'bearer'
+                ];
+    }
+    public function login(LoginRequest $request){
+        $user = User::where('email', $request->email)->first();
+        //validation of user type
+        if (!$user || $user->role_id !== Role::MERCHANT){
+            return response()->json([
+                'error' => 'You are not allowed to log in as merchant',
+                'email' => $request->email,
+            ], 401);
+        }
+        //if the user credentials are incorrect
+        if (!auth()->attempt($request->all())){
+            return response()->json([
+                'error' => 'credentials error',
+                'email' => $request->email,
+            ], 401);
+        }
+        $token = $user->generateToken();
+        return response()->json([
+            'message' => 'server sucessfully authenticated the user',
+            'token' => $token,
+            'token_type' => 'bearer',
+            'user_type' => 'Merchant',
+            'role_id' => Role::MERCHANT
         ]);
-
-        $location = Location::create([
-            'building_name' => $request->building,
-            'street' => $request->street,
-            'barangay' => $request->barangay,
-            'city' => $request->city,
-            'province' => $request->province,
-            'country' => $request->country
-        ]);
-
-        $category = MerchantCategory::create([
-            'merchant_name' => $request->category,
-        ]);
-        $philgeps = Philgep::create([
-            'type' => $request->philgeps
-        ]);
-        $user->merchant()->create([
-            'business_name' => $request->businessName,
-            'location_id' => $location->location_id,
-            'category_id' => $category->id,
-            'philgeps_id' => $philgeps->id,
-        ]);
-
-        DB::commit();
-        return JWTAuth::fromUser($user);
     }
 }
