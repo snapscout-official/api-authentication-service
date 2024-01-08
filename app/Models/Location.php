@@ -19,6 +19,9 @@ class Location extends Model
     ];
     public $timestamps = false;
     protected $primaryKey = 'location_id';
+    protected $hidden = [
+        'location_id'
+    ];
     public function merchant():HasOne{
         return $this->hasOne(Merchant::class, 'location_id', 'location_id');
     }

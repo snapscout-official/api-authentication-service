@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Merchant;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -15,5 +16,5 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     // return view('welcome');
-    return storage_path(env('JWT_PUBLIC_KEY'));
+    // return storage_path(env('JWT_PUBLIC_KEY'));
 });

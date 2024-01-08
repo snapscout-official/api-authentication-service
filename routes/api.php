@@ -21,4 +21,9 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 
 Route::post('login', [AuthController::class, 'login']);
-Route::post('/signup', [MerchantAuthController::class, 'signup']);
+Route::group(['prefix' => 'merchant'], function(){
+    Route::controller(MerchantAuthController::class)->group(function(){
+        Route::post('/signup', 'signup');
+        Route::post('/login', 'login');
+    });
+});

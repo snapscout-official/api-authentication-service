@@ -19,7 +19,12 @@ class Merchant extends Model
     ];
 
     protected $touches = ['user'];
-
+    protected $hidden = [
+        'merchant_id',
+        'location_id',
+        'category_id',
+        'philgeps_id'
+    ];
     protected $table = 'merchants';
     protected $primaryKey = 'merchant_id';
     public $incrementing = false;
