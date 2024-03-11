@@ -1,6 +1,7 @@
 <?php
 
 use App\Models\Merchant;
+use App\Events\CheckListEvent;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -17,4 +18,8 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     // return view('welcome');
     // return storage_path(env('JWT_PUBLIC_KEY'));
+});
+Route::get('/notification', function(){
+    event(new CheckListEvent('Hello websocket'));
+    return 'hello';
 });

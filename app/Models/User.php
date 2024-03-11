@@ -52,6 +52,12 @@ class User extends Authenticatable implements JWTSubject
         'password' => 'hashed',
     ];
    
+    public function isMerchant():bool{
+        if ($this->role_id === Role::MERCHANT){
+            return true;
+        }
+        return false;
+    }
     public function agency():HasOne{
         return $this->hasOne(Agency::class, 'agency_id', 'id');
     }

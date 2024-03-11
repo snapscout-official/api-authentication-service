@@ -1,10 +1,10 @@
 <?php
 
-namespace App\Http\Requests\Merchant;
+namespace App\Http\Requests\Agency;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class LoginRequest extends FormRequest
+class LoginAgencyRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -22,7 +22,7 @@ class LoginRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'email' => 'required|email',
+            'email' => 'required|string',
             'password' => 'required'
         ];
     }

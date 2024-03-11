@@ -19,21 +19,20 @@ trait HasClaims{
             'gender' => $this->gender,
             'phone_number' => $this->phone_number,
             'email' => $this->email,
-            'role_id' => null,
-            'location'
         ];
-
+        if ($this->role_id === Role::ADMIN){
+            $claims['role_id'] = Role::ADMIN;
+            return $claims;
+        }
         if ($this->role_id === Role::AGENCY){
-            $agency_data = $this->agency;
+            $agency_data = $this->agency()->with(['location'])->first();
             $claims['agency'] = $agency_data;
-            $claims['location'] = $agency_data->location;
             $claims['role_id'] = Role::AGENCY;
             return $claims;
         }
         if ($this->role_id === Role::MERCHANT){
-            $merchant_data = $this->merchant;
+            $merchant_data = $this->merchant()->with(['location'])->first();
             $claims['merchant'] = $merchant_data;
-            $claims['location'] = $merchant_data->location;
             $claims['role_id'] = Role::MERCHANT;
             return $claims;
         }
