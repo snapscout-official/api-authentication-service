@@ -15,6 +15,7 @@ class AuthController extends Controller
     public function signup(SignupRequest $request){
         $user = CreateMerchantCredentials::run($request);
         event(new Registered($user));
+        
         $token = $user->generateToken();
         return $request->expectsJson() ? 
                 response()->json([

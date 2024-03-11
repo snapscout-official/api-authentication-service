@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Role;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class AuthController extends Controller
@@ -18,6 +20,25 @@ class AuthController extends Controller
                 'token' => $token,
                 'token_type' => 'bearer'
             ]
+        ]);
+    }
+    public function loginAsAdmin(Request $request){
+        $credentials = $request->only(['email', 'password']);
+        $user = User::where('email', $request->email)->first();
+        if ($user->role_id !== Role::ADMIN){
+            return response()->json([
+                'error' => 'you are not allowed to login as admin',
+                'email' => $request->email
+            ]);
+        }
+        if (!auth()->attempt($credentials)){
+            return response()->json([
+                'error'
+            ], 422);
+        }
+        $token = $user->generateToken();
+        return response()->json([
+            'token' => $token
         ]);
     }
 
