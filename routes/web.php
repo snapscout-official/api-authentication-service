@@ -1,8 +1,12 @@
 <?php
 
+use App\Models\Role;
+use App\Models\User;
 use App\Models\Merchant;
 use App\Events\CheckListEvent;
 use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Notification;
+use App\Notifications\Merchant\CheckListNotification;
 
 /*
 |--------------------------------------------------------------------------
@@ -22,4 +26,9 @@ Route::get('/', function () {
 Route::get('/notification', function(){
     event(new CheckListEvent('Hello websocket'));
     return 'hello';
+});
+Route::get('/notify', function(){
+    $user = User::where('role_id', Role::MERCHANT)->get();
+    Notification::send($user, new CheckListNotification());
+    return 'test';
 });
