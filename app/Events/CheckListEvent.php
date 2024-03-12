@@ -17,6 +17,8 @@ class CheckListEvent implements ShouldBroadcast
     /**
      * Create a new event instance.
      */
+    public $connection = 'redis';
+    public $queue = 'default';
     private string $message;
     public function __construct($message)
     {
@@ -31,7 +33,7 @@ class CheckListEvent implements ShouldBroadcast
     public function broadcastOn(): array
     {
         return [
-            new PrivateChannel('check-list'),
+            new PrivateChannel('merchant-notification'),
         ];
     }
     public function broadcastWith():array{
