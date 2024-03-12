@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials =   $request->only('email', 'password');
-        if (!$token = auth()->attempt($credentials)){
+        if (!$token = auth('jwt')->attempt($credentials)){
             abort(406);
         }
         return response()->json([
@@ -31,7 +31,7 @@ class AuthController extends Controller
                 'email' => $request->email
             ]);
         }
-        if (!auth()->attempt($credentials)){
+        if (!auth('jwt')->attempt($credentials)){
             return response()->json([
                 'error'
             ], 422);

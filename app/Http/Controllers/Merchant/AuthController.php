@@ -39,7 +39,7 @@ class AuthController extends Controller
             ], 401);
         }
         //if the user credentials are incorrect
-        if (!auth()->attempt($request->all())){
+        if (!auth('jwt')->attempt($request->all())){
             return response()->json([
                 'error' => 'credentials error',
                 'email' => $request->email,
