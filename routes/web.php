@@ -7,6 +7,7 @@ use App\Events\CheckListEvent;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Merchant\CheckListNotification;
+use Illuminate\Support\Facades\Redis;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,5 +31,6 @@ Route::get('/notification', function(){
 Route::get('/notify', function(){
     $user = User::where('role_id', Role::MERCHANT)->get();
     Notification::send($user, new CheckListNotification());
+    Redis::set('Gio', 'test');
     return 'test';
 });
