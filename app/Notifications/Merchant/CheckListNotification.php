@@ -18,6 +18,7 @@ class CheckListNotification extends Notification
     public function __construct()
     {
         $this->onConnection('redis');
+        $this->onQueue('notification');
     }
 
     /**

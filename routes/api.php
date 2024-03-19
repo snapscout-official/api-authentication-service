@@ -34,4 +34,17 @@ Route::get('/cache', function(){
     ]);
 })->name('cache');
 Route::post('/send-notification', [SendNotificationController::class, 'send']);
-
+Route::middleware(['auth:jwt'])->group(function(){
+    Route::post('/verify-token', function(Request $request){
+        $validated = $request->validate([
+            'token' => 'required|string'
+        ], $request->all());
+        $authenticatedUser = $request->user();
+        return response()->json([
+            'message' => 'token is valid',
+            'email' => $authenticatedUser->email,
+            'name' => "{$authenticatedUser->first_name} {$authenticatedUser->last_name}"
+        ]);
+    });
+        
+});

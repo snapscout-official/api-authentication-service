@@ -25,7 +25,7 @@ class AuthController extends Controller
     public function loginAsAdmin(Request $request){
         $credentials = $request->only(['email', 'password']);
         $user = User::where('email', $request->email)->first();
-        if ($user->role_id !== Role::ADMIN){
+        if (!$user || $user->role_id !== Role::ADMIN){
             return response()->json([
                 'error' => 'you are not allowed to login as admin',
                 'email' => $request->email
@@ -38,7 +38,9 @@ class AuthController extends Controller
         }
         $token = $user->generateToken();
         return response()->json([
-            'token' => $token
+            'token' => $token,
+            'name' => "{$user->first_name} {$user->last_name}",
+            'email' => $user->email
         ]);
     }
 
