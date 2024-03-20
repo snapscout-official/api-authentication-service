@@ -2,7 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Merchant;
+use App\Models\User;
+use App\Notifications\Merchant\CheckListNotification;
 use Illuminate\Console\Command;
+use Illuminate\Support\Facades\Notification;
 use Illuminate\Support\Facades\Redis;
 
 class MerchantNotification extends Command
@@ -28,9 +32,9 @@ class MerchantNotification extends Command
     {
        Redis::subscribe('notifies:merchant', function($notificationData){
         $notificationData = json_decode($notificationData);
-        foreach($notificationData as $notificationId){
-            echo 'ids looped' . PHP_EOL;
-        }
-       });
+        [$merchantIds, $checklist] = $notificationData;
+        $merchants = User::whereIn('id', $merchantIds)->get();
+        Notification::send($merchants, new CheckListNotification($checklist));
+    });
     }
 }

@@ -8,14 +8,14 @@ use Illuminate\Notifications\Messages\BroadcastMessage;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CheckListNotification extends Notification
+class CheckListNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct()
+    public function __construct(public $notification_content)
     {
         $this->onConnection('redis');
         $this->onQueue('notification');
@@ -30,7 +30,11 @@ class CheckListNotification extends Notification
     {
         return ['broadcast'];
     }
-
+    // public function viaConnections():array{
+    //     return [
+    //         'broadcast' => 'redis'
+    //     ];
+    // }
     /**
      * Get the mail representation of the notification.
      */
@@ -55,7 +59,7 @@ class CheckListNotification extends Notification
     }
     public function toBroadcast(object $notifiable):BroadcastMessage{
         return new BroadcastMessage([
-            'message' => 'test'
+            'notification_content' => $this->notification_content
         ]);
     }
 }
