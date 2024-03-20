@@ -122,7 +122,7 @@ return [
     'redis' => [
 
         'client' => env('REDIS_CLIENT', 'phpredis'),
-
+        'read_write_timeout' => 0,
         'options' => [
             'cluster' => env('REDIS_CLUSTER', 'redis'),
             'prefix' => env('REDIS_PREFIX', Str::slug(env('APP_NAME', 'laravel'), '_').'_database_'),
