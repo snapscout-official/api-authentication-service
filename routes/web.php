@@ -21,8 +21,8 @@ use Illuminate\Support\Facades\Redis;
 */
 
 Route::get('/', function () {
-    // return view('welcome');
     // return storage_path(env('JWT_PUBLIC_KEY'));
+    return storage_path( env('JWT_PUBLIC_KEY'));
 });
 Route::get('/notification', function(){
     event(new CheckListEvent('Hello websocket'));

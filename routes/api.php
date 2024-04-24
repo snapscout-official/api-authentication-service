@@ -46,5 +46,5 @@ Route::middleware(['auth:jwt'])->group(function(){
             'name' => "{$authenticatedUser->first_name} {$authenticatedUser->last_name}"
         ]);
     });
-        
+
 });
