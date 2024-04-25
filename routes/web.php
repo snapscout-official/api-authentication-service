@@ -21,14 +21,13 @@ use Illuminate\Support\Facades\Redis;
 */
 
 Route::get('/', function () {
-    // return storage_path(env('JWT_PUBLIC_KEY'));
-    return storage_path( env('JWT_PUBLIC_KEY'));
+    return "Hello from snapscout Auth Service";
 });
-Route::get('/notification', function(){
+Route::get('/notification', function () {
     event(new CheckListEvent('Hello websocket'));
     return 'hello';
 });
-Route::get('/notify', function(){
+Route::get('/notify', function () {
     $user = User::where('role_id', Role::MERCHANT)->get();
     Notification::send($user, new CheckListNotification());
     Redis::set('Gio', 'test');

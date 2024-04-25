@@ -1,0 +1,16 @@
+services:
+  snap-auth:
+    image: snapscout-auth:latest
+    build:
+      dockerfile: Dockerfile.prod
+    env_file:
+      - .env.prod
+    volumes:
+      - ./storage:/app/storage
+    ports:
+      - "8000:80"
+    networks:
+      - app
+networks:
+  app:
+    driver: bridge

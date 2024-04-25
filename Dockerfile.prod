@@ -1,0 +1,14 @@
+FROM webdevops/php-nginx:8.1-alpine
+WORKDIR /app
+ENV WEB_DOCUMENT_ROOT=/app/public
+COPY composer.json composer.lock
+COPY . .
+RUN composer install --no-interaction --optimize-autoloader
+# Ensure all of our files are owned by the same user and group.
+RUN chown -R application:application .
+RUN php artisan optimize
+RUN php artisan config:clear
+#RUN php artisan cache:clear
+#RUN php artisan migrate:fresh
+HEALTHCHECK --interval=5m --timeout=3s \
+    CMD curl -f http://localhost/ || exit 1
