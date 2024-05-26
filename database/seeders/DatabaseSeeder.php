@@ -23,7 +23,7 @@ class DatabaseSeeder extends Seeder
         }
         $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
         ->format('Y-m-d');
-        // $user = User::create([
+        // $adminUser = User::create([
         //     'first_name' => 'Mary',
         //     'last_name' => 'Soliva',
         //     'birth_date' => $date,
@@ -33,7 +33,7 @@ class DatabaseSeeder extends Seeder
         //     'email' => 'mary.soliva@carsu.edu.ph',
         //     'password' => Hash::make('starmovies3144'),
         //     'role_id' => Role::ADMIN]);
-        $user = User::create([
+        $agencyUser = User::create([
           'first_name' => 'Klinth',
           'last_name' => 'Matugas',
           'birth_date' => $date,
@@ -55,7 +55,7 @@ class DatabaseSeeder extends Seeder
         $agencyCategory = AgencyCategory::create([
            'agency_category_name' => 'General Merchandise'
         ]);
-        $agency = $user->agency()->create([
+        $agency = $agencyUser->agency()->create([
           'agency_name' => 'COA',
           'position' => 'GSO',
           'location_id' => $location->location_id,

@@ -12,10 +12,12 @@ use App\Models\Merchant\MerchantCategory;
 use Lorisleiva\Actions\Concerns\AsAction;
 use App\Http\Requests\Merchant\SignupRequest;
 
-class CreateMerchantCredentials{
+class CreateMerchantCredentials
+{
     use AsAction;
 
-    public function handle(SignupRequest $request){
+    public function handle(SignupRequest $request)
+    {
         DB::beginTransaction();
 
         $user = User::create([

@@ -11,7 +11,7 @@ class AuthController extends Controller
     public function login(Request $request)
     {
         $credentials =   $request->only('email', 'password');
-        if (!$token = auth('jwt')->attempt($credentials)){
+        if (!$token = auth('jwt')->attempt($credentials)) {
             abort(406);
         }
         return response()->json([
@@ -22,16 +22,17 @@ class AuthController extends Controller
             ]
         ]);
     }
-    public function loginAsAdmin(Request $request){
+    public function loginAsAdmin(Request $request)
+    {
         $credentials = $request->only(['email', 'password']);
         $user = User::where('email', $request->email)->first();
-        if (!$user || $user->role_id !== Role::ADMIN){
+        if (!$user || $user->role_id !== Role::ADMIN) {
             return response()->json([
                 'error' => 'you are not allowed to login as admin',
                 'email' => $request->email
             ]);
         }
-        if (!auth('jwt')->attempt($credentials)){
+        if (!auth('jwt')->attempt($credentials)) {
             return response()->json([
                 'error'
             ], 422);
