@@ -5,10 +5,13 @@ namespace App\Actions\Agency;
 use App\Http\Requests\Agency\AgencyRegisterRequest;
 use App\Models\Agency\AgencyCategory;
 use App\Models\Location;
+use App\Models\Role;
 use App\Models\User;
 use Illuminate\Auth\Events\Registered;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Lorisleiva\Actions\Concerns\AsAction;
 
 class CreateAgencyCredentials
@@ -18,10 +21,11 @@ class CreateAgencyCredentials
     {
         try {
             DB::beginTransaction();
+            $date = Carbon::parse($request->dateOfBirth);
             $user = User::create([
                 'first_name' => $request->firstName,
                 'last_name' => $request->lastName,
-                'birth_date' => $request->dateOfBirth,
+                'birth_date' => $date,
                 'tin_number' => $request->tinNumber,
                 'gender' => $request->gender,
                 'phone_number' => $request->contactNumber,
@@ -59,8 +63,9 @@ class CreateAgencyCredentials
 
         } catch (\Throwable $e) {
 
-            //handler error here
-            // throw new Exception("Error Processing Request", 1);
+            return response()->json([
+                'error' => 'something went wrong'
+            ], 422);
         }
 
 

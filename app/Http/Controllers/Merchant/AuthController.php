@@ -18,17 +18,13 @@ class AuthController extends Controller
         event(new Registered($user));
 
         $token = $user->generateToken();
-        return $request->expectsJson() ?
-                response()->json([
-                    'message' => 'sucessfully created merchant user',
-                    'token' => $token,
-                    'token_type' => 'bearer'
-                ]) :
-                [
-                    'message' => 'sucessfully created merchant user',
-                    'token' => $token,
-                    'token_type' => 'bearer'
-                ];
+        $user = collect($user)->merge([
+            'role' => 'merchant'
+        ]);
+        return response()->json([
+            'user'  => $user,
+            'token' => $token,
+        ]);
     }
     public function login(LoginRequest $request)
     {
@@ -48,7 +44,7 @@ class AuthController extends Controller
             ], 401);
         }
         $token = $user->generateToken();
-        $user = $user->merge([
+        $user = collect($user)->merge([
             'role' => 'merchant'
         ]);
         return response()->json([

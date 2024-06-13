@@ -11,13 +11,13 @@ class Philgep extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'type'
+        'file_path'
     ];
-    
+
     protected $table = 'philgeps';
     public $timestamps = false;
 
-    public function merchant():HasOne
+    public function merchant(): HasOne
     {
         return $this->hasOne(Merchant::class, 'philgeps_id');
     }

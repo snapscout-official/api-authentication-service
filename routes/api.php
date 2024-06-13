@@ -20,6 +20,10 @@ Route::group(['prefix' => 'agency'], function () {
     Route::controller(AgencyAuthController::class)->group(function () {
         Route::post('/login', 'login');
         Route::post('/signup', 'signup');
+        Route::post('/update-profile', function (Request $request) {
+            dd($request);
+            return "Not yet implemented";
+        });
     });
 });
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -35,6 +39,11 @@ Route::get('/cache', function () {
 })->name('cache');
 Route::post('/send-notification', [SendNotificationController::class, 'send']);
 Route::middleware(['auth:jwt'])->group(function () {
+    Route::get('/bar', function (Request $request) {
+        return response()->json([
+            'message' => 'Welcome'
+        ]);
+    });
     Route::post('/verify-token', function (Request $request) {
         $validated = $request->validate([
             'token' => 'required|string'

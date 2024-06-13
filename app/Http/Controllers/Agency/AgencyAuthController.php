@@ -41,14 +41,14 @@ class AgencyAuthController extends Controller
     {
         try {
             $user = CreateAgencyCredentials::run($request);
-            if (is_null($user)) {
+            if (is_null($user) || !($user instanceof User)) {
                 return response()->json([
                 "error" => "error creating user in the server" ,
                 'success' => false
             ], 422);
             }
             $token = $user->generateToken();
-            $user = $user->merge([
+            $user = collect($user)->merge([
                 'role' => 'agency'
             ]);
             return response()->json([

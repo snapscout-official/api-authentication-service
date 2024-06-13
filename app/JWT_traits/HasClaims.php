@@ -1,10 +1,11 @@
 <?php
+
 namespace App\JWT_traits;
 
 use App\Models\Role;
 
-trait HasClaims{
-    
+trait HasClaims
+{
     public function getJWTIdentifier()
     {
         return $this->id;
@@ -20,17 +21,17 @@ trait HasClaims{
             'phone_number' => $this->phone_number,
             'email' => $this->email,
         ];
-        if ($this->role_id === Role::ADMIN){
+        if ($this->role_id === Role::ADMIN) {
             $claims['role_id'] = Role::ADMIN;
             return $claims;
         }
-        if ($this->role_id === Role::AGENCY){
+        if ($this->role_id === Role::AGENCY) {
             $agency_data = $this->agency()->with(['location'])->first();
             $claims['agency'] = $agency_data;
             $claims['role_id'] = Role::AGENCY;
             return $claims;
         }
-        if ($this->role_id === Role::MERCHANT){
+        if ($this->role_id === Role::MERCHANT) {
             $merchant_data = $this->merchant()->with(['location'])->first();
             $claims['merchant'] = $merchant_data;
             $claims['role_id'] = Role::MERCHANT;
