@@ -8,6 +8,7 @@ use Illuminate\Foundation\Auth\EmailVerificationRequest;
 use App\Http\Controllers\Merchant\AuthController as MerchantAuthController;
 use App\Http\Controllers\SendNotificationController;
 use Illuminate\Support\Facades\Cache;
+use Tymon\JWTAuth\JWT;
 
 Route::post('/admin/login', [AuthController::class, 'loginAsAdmin']);
 Route::group(['prefix' => 'merchant'], function () {
@@ -20,10 +21,7 @@ Route::group(['prefix' => 'agency'], function () {
     Route::controller(AgencyAuthController::class)->group(function () {
         Route::post('/login', 'login');
         Route::post('/signup', 'signup');
-        Route::post('/update-profile', function (Request $request) {
-            dd($request);
-            return "Not yet implemented";
-        });
+
     });
 });
 Route::get('/email/verify/{id}/{hash}', function (EmailVerificationRequest $request) {
@@ -44,6 +42,25 @@ Route::middleware(['auth:jwt'])->group(function () {
             'message' => 'Welcome'
         ]);
     });
+
+    //api route for email verification during profile update.
+    /* Route::get('/agency/update-profile', [AgencyAuthController::class, 'update_profile']); */
+    Route::post('/agency/update-profile',[AgencyAuthController::class, 'update']);
+    Route::post('/agency/signout', function(Request $request){
+        /** @var $user User*/
+        try{
+            $user = auth()->user();
+            $token = $request->bearerToken();
+            $user->invalidateToken($token);
+            return response()->json([
+                'message' => 'signed out successfully'
+            ], 200);
+        }catch(Throwable $th){
+            return response()->json([
+                'message' => $th->getMessage()
+            ], 422);
+        }
+    });
     Route::post('/verify-token', function (Request $request) {
         $validated = $request->validate([
             'token' => 'required|string'
@@ -57,3 +74,5 @@ Route::middleware(['auth:jwt'])->group(function () {
     });
 
 });
+
+

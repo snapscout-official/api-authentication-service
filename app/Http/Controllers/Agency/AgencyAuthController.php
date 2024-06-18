@@ -3,16 +3,23 @@
 namespace App\Http\Controllers\Agency;
 
 use App\Actions\Agency\CreateAgencyCredentials;
+use App\Actions\Agency\UpdateAgencyProfile;
 use App\Http\Requests\Agency\AgencyRegisterRequest;
+use App\Http\Requests\UpdateAgencyProfileRequest;
 use App\Models\Role;
 use App\Models\User;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Agency\LoginAgencyRequest;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Mail;
+use Throwable;
 
 class AgencyAuthController extends Controller
 {
-    public function login(LoginAgencyRequest $request)
+    public function login(LoginAgencyRequest $request):JsonResponse
     {
+
         $user = User::where('email', $request->email)->first();
         //validation of user type
         if (!$user || $user->role_id !== Role::AGENCY) {
@@ -37,7 +44,7 @@ class AgencyAuthController extends Controller
             'user' => $user
         ]);
     }
-    public function signup(AgencyRegisterRequest $request)
+    public function signup(AgencyRegisterRequest $request):JsonResponse
     {
         try {
             $user = CreateAgencyCredentials::run($request);
@@ -64,4 +71,24 @@ class AgencyAuthController extends Controller
         }
 
     }
+    public function update(UpdateAgencyProfileRequest $request): JsonResponse{
+        //update user fields
+
+       return UpdateAgencyProfile::run($request);
+    }
+    // this is for the email verification. will be implemented in the future
+    // public function update_profile(Request $request):JsonResponse{
+    //     if (!$request->hasValidSignature){
+    //         return response()->json([
+    //             'message' => 'the url might be modified'
+    //         ],422);
+    //     }
+    //     $user = auth()->user();
+    //     if (is_null($user)){
+    //         return response()->json([
+    //             'message' => 'no currently authenticated user'
+    //         ],422);
+    //     }
+    // }
+
 }

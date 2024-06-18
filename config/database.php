@@ -151,7 +151,6 @@ return [
             'database' => env('REDIS_QUEUE_DATABASE', '3'),
         ]
 
-
     ],
 
 ];

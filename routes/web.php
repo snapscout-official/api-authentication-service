@@ -1,13 +1,15 @@
 <?php
 
+use App\Http\Controllers\Agency\AgencyAuthController;
 use App\Models\Role;
 use App\Models\User;
 use App\Models\Merchant;
 use App\Events\CheckListEvent;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Notification;
 use App\Notifications\Merchant\CheckListNotification;
-use Illuminate\Support\Facades\Redis;
+use Illuminate\Support\Facades\URL;
 
 /*
 |--------------------------------------------------------------------------
@@ -21,7 +23,7 @@ use Illuminate\Support\Facades\Redis;
 */
 
 Route::get('/', function () {
-    return "Hello from snapscout Auth Service";
+    return URL::temporarySignedRoute('signed', now()->addMinute(), ['id' => 1]);
 });
 Route::get('/notification', function () {
     event(new CheckListEvent('Hello websocket'));
@@ -30,6 +32,8 @@ Route::get('/notification', function () {
 Route::get('/notify', function () {
     $user = User::where('role_id', Role::MERCHANT)->get();
     Notification::send($user, new CheckListNotification());
-    Redis::set('Gio', 'test');
+    // Redis::set('Gio', 'test');
     return 'test';
 });
+
+Route::get('/agency/update-profile', [AgencyAuthController::class, 'update_profile']);

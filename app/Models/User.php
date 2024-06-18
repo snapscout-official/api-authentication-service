@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\JWT;
 
 class User extends Authenticatable implements JWTSubject
 {
@@ -50,7 +51,7 @@ class User extends Authenticatable implements JWTSubject
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
-   
+
     public function isMerchant():bool{
         if ($this->role_id === Role::MERCHANT){
             return true;
@@ -65,5 +66,10 @@ class User extends Authenticatable implements JWTSubject
     }
     public function generateToken(){
         return JWTAuth::fromUser($this);
+    }
+    public function invalidateToken($token){
+        //invalidates the token
+        JWTAuth::setToken($token);
+        return JWTAuth::invalidate();
     }
 }
