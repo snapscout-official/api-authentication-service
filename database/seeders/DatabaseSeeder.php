@@ -15,12 +15,12 @@ class DatabaseSeeder extends Seeder
     public function run(): void
     {
 
-        $roles = ['merchant', 'agency', 'admin'];
-        foreach($roles as $role) {
-            Role::create([
-                'role_name' => $role
-            ]);
-        }
+        // $roles = ['merchant', 'agency', 'admin'];
+        // foreach($roles as $role) {
+        //     Role::create([
+        //         'role_name' => $role
+        //     ]);
+        // }
         $date = Carbon::createFromFormat('F j, Y', 'March 21, 2002')
         ->format('Y-m-d');
         // $adminUser = User::create([

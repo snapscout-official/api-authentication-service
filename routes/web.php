@@ -23,7 +23,7 @@ use Illuminate\Support\Facades\URL;
 */
 
 Route::get('/', function () {
-    return URL::temporarySignedRoute('signed', now()->addMinute(), ['id' => 1]);
+    return "Hello World";
 });
 Route::get('/notification', function () {
     event(new CheckListEvent('Hello websocket'));
@@ -32,7 +32,7 @@ Route::get('/notification', function () {
 Route::get('/notify', function () {
     $user = User::where('role_id', Role::MERCHANT)->get();
     Notification::send($user, new CheckListNotification());
-    // Redis::set('Gio', 'test');
+    // Redis::wset('Gio', 'test');
     return 'test';
 });
 

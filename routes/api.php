@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Agency\AgencyAuthController;
 use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
 use Illuminate\Foundation\Auth\EmailVerificationRequest;
@@ -76,3 +77,8 @@ Route::middleware(['auth:jwt'])->group(function () {
 });
 
 
+Route::get('/test', function(){
+    return response()->json([
+        'date' => Carbon::now()
+    ]);
+});

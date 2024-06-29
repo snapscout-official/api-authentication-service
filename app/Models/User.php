@@ -69,7 +69,6 @@ class User extends Authenticatable implements JWTSubject
     }
     public function invalidateToken($token){
         //invalidates the token
-        JWTAuth::setToken($token);
-        return JWTAuth::invalidate();
+        JWTAuth::setToken($token)->invalidate();
     }
 }
